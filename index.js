@@ -22,6 +22,7 @@ app.get("/", (req, res) => {
 
 client.connect(err => {
   const servicesCollection = client.db("foodBuzDb").collection("services");
+  const bookingsCollection = client.db("foodBuzDb").collection("bookings");
   // perform actions on the collection object
   // client.close();
 
@@ -50,6 +51,26 @@ client.connect(err => {
     .toArray();
     res.send(result[0]);
   });
+
+  // order confirm
+  app.post("/confirmOrder", async (req, res) =>{
+    const result = await bookingsCollection.insertOne(req.body);
+    res.send(result);
+  })
+
+  // user confirmed order
+  app.get("/myOrders/:email", async(req, res) =>{
+    const result = await bookingsCollection.find({ email: req.params.email }).toArray();
+    res.send(result);
+  });
+
+  // Cancel Order
+  app.delete("/cancelOrder/:id", async (req, res) =>{
+    const cancelOrder = await bookingsCollection.deleteOne({
+    _id: ObjectId(req.params.id)
+  })
+  res.send(cancelOrder);
+});
 });
 
 app.listen(process.env.PORT || port);
