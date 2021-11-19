@@ -43,12 +43,13 @@ client.connect(err => {
 
 
   // get single product
-  app.get("/signleProduct/:id", async (req, res) =>{
+  app.get("/singleProduct/:id", async (req, res) => {
+    // console.log(req.params.id);
     const result = await servicesCollection
-    .find({_id: ObjectId(req.params.id)})
+    .find({ _id: ObjectId(req.params.id) })
     .toArray();
     res.send(result[0]);
-  })
+  });
 });
 
 app.listen(process.env.PORT || port);
