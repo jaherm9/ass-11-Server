@@ -71,6 +71,24 @@ client.connect(err => {
   })
   res.send(cancelOrder);
 });
+  // get all Order
+  app.get("/allOrders", async(req, res) =>{
+    const allOrder = await bookingsCollection.find({}).toArray();
+    res.send(allOrder);
+  });
+ // status update
+ app. put("/updateStatus/:id", (req, res) =>{
+   const id = req.params.id;
+   const statusUpdate = req.body.status;
+   const filter = {_id: ObjectId(id)};
+   console.log(statusUpdate);
+   bookingsCollection.updateOne(filter,{
+     $set:{status: statusUpdate}, 
+   })
+   .then((result) =>{
+     console.log(result);
+   })
+ });
 });
 
 app.listen(process.env.PORT || port);
